@@ -3,71 +3,86 @@ import { productsDB } from '../Model/bancoDados';
 import { Product } from '../Model/productClass';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class ProductsService {
-  // Referência ao "banco" simulado
   private products: Product[] = productsDB;
+  private filePath = path.join(process.cwd(), 'src/Model/products.json');
+
+  constructor() {
+    this.loadFromFile();
+  }
+
+  /** Carrega dados do arquivo JSON, se existir */
+  private loadFromFile() {
+    try {
+      if (fs.existsSync(this.filePath)) {
+        const json = fs.readFileSync(this.filePath, 'utf-8');
+        this.products = JSON.parse(json).map(
+          (p: any) => new Product(p.id, p.name, p.price, p.description)
+        );
+      }
+    } catch (error) {
+      console.error('Erro ao carregar produtos do JSON:', error);
+    }
+  }
+
+  /** Salva os produtos no arquivo JSON, criando a pasta se necessário */
+  private saveToFile() {
+    try {
+      const dir = path.dirname(this.filePath);
+
+      // cria diretório se não existir
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+
+      fs.writeFileSync(this.filePath, JSON.stringify(this.products, null, 2), 'utf-8');
+    } catch (error) {
+      console.error('Erro ao salvar produtos no JSON:', error);
+    }
+  }
 
   findAll(): Product[] {
-    // Aqui não é necessário try/catch, mas mantemos simples e direto
     return this.products;
   }
 
   findOne(id: number): Product {
-    try {
-      const product = this.products.find((p) => p.id === id);
-      if (!product) {
-        throw new NotFoundException(`Produto com ID ${id} não encontrado`);
-      }
-      return product;
-    } catch (error) {
-      // Re-lançamos se já for uma exceção do Nest; caso contrário, convertemos em 500
-      if (error instanceof NotFoundException) throw error;
-      throw new InternalServerErrorException('Erro ao buscar o produto');
-    }
+    const product = this.products.find((p) => p.id === id);
+    if (!product) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
+    return product;
   }
 
   create(dto: CreateProductDto): Product {
-    try {
-      const maxId = this.products.reduce((acc, p) => (p.id > acc ? p.id : acc), 0);
-      const newId = maxId + 1;
-      const product = new Product(newId, dto.name, dto.price, dto.description);
-      this.products.push(product);
-      return product;
-    } catch (error) {
-      throw new InternalServerErrorException('Erro ao criar produto');
-    }
+    const maxId = this.products.reduce((acc, p) => (p.id > acc ? p.id : acc), 0);
+    const newId = maxId + 1;
+    const product = new Product(newId, dto.name, dto.price, dto.description);
+    this.products.push(product);
+
+    this.saveToFile(); // salva no JSON
+    return product;
   }
 
   update(id: number, dto: UpdateProductDto): Product {
-    try {
-      const index = this.products.findIndex((p) => p.id === id);
-      if (index === -1) {
-        throw new NotFoundException(`Produto com ID ${id} não encontrado`);
-      }
+    const index = this.products.findIndex((p) => p.id === id);
+    if (index === -1) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
 
-      // Como combinamos PUT, substituímos o objeto por completo (mantendo id)
-      const updated = new Product(id, dto.name, dto.price, dto.description);
-      this.products[index] = updated;
-      return updated;
-    } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      throw new InternalServerErrorException('Erro ao atualizar produto');
-    }
+    const updated = new Product(id, dto.name, dto.price, dto.description);
+    this.products[index] = updated;
+
+    this.saveToFile(); // salva no JSON
+    return updated;
   }
 
   remove(id: number): { message: string } {
-    try {
-      const index = this.products.findIndex((p) => p.id === id);
-      if (index === -1) {
-        throw new NotFoundException(`Produto com ID ${id} não encontrado`);
-      }
-      this.products.splice(index, 1);
-      return { message: 'Produto removido com sucesso' };
-    } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      throw new InternalServerErrorException('Erro ao remover produto');
-    }
+    const index = this.products.findIndex((p) => p.id === id);
+    if (index === -1) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
+
+    this.products.splice(index, 1);
+
+    this.saveToFile(); // salva no JSON
+    return { message: 'Produto removido com sucesso' };
   }
 }
