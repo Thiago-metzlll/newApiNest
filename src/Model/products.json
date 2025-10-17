@@ -1,6 +1,12 @@
 [
   {
-    "id": 1,
+    "id": 2,
+    "name": "Calça Jeans",
+    "price": 0.01,
+    "description": "´p"
+  },
+  {
+    "id": 3,
     "name": "Calça Jeans",
     "price": 0.01,
     "description": "´p"

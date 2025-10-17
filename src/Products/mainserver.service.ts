@@ -62,39 +62,41 @@ export class ProductsService {
   }
 
   create(dto: CreateProductDto): Product {
-    const maxId = this.products.reduce((acc, p) => (p.id > acc ? p.id : acc), 0);
-    const newId = maxId + 1;
+  const maxId = this.products.reduce((acc, p) => (p.id > acc ? p.id : acc), 0);
+  const newId = maxId + 1;
 
-    const product = new Product(
-      newId,
-      dto.name,
-      dto.price,
-      dto.description || '',
-      dto.imageUrl || '' // adiciona imageUrl
-    );
+  const product = new Product(
+    newId,
+    dto.name,
+    dto.price,
+    dto.description || '',
+    dto.imageUrl || '' // ✅ garantir que a URL seja salva
+  );
 
-    this.products.push(product);
-    this.saveToFile();
-    return product;
-  }
+  this.products.push(product);
+  this.saveToFile(); // salva no JSON
+  return product;
+}
+
 
   update(id: number, dto: UpdateProductDto): Product {
-    const index = this.products.findIndex((p) => p.id === id);
-    if (index === -1) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
+  const index = this.products.findIndex((p) => p.id === id);
+  if (index === -1) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
 
-    const current = this.products[index];
-    const updated = new Product(
-      id,
-      dto.name ?? current.name,
-      dto.price ?? current.price,
-      dto.description ?? current.description,
-      dto.imageUrl ?? current.imageUrl // atualiza imageUrl
-    );
+  const current = this.products[index];
+  const updated = new Product(
+    id,
+    dto.name ?? current.name,
+    dto.price ?? current.price,
+    dto.description ?? current.description,
+    dto.imageUrl ?? current.imageUrl // ✅ garantir que a URL seja atualizada
+  );
 
-    this.products[index] = updated;
-    this.saveToFile();
-    return updated;
-  }
+  this.products[index] = updated;
+  this.saveToFile(); // salva no JSON
+  return updated;
+}
+
 
   remove(id: number): { message: string } {
     const index = this.products.findIndex((p) => p.id === id);
