@@ -3,107 +3,65 @@ import { productsDB } from '../Model/bancoDados';
 import { Product } from '../Model/productClass';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
-import * as fs from 'fs';
-import * as path from 'path';
 
 @Injectable()
 export class ProductsService {
   private products: Product[] = productsDB;
-  private filePath = path.join(process.cwd(), 'src/Model/products.json');
 
-  constructor() {
-    this.loadFromFile();
-  }
-
-  /** Carrega dados do arquivo JSON, se existir */
-  private loadFromFile() {
-    try {
-      if (fs.existsSync(this.filePath)) {
-        const json = fs.readFileSync(this.filePath, 'utf-8');
-        this.products = JSON.parse(json).map(
-          (p: any) =>
-            new Product(
-              p.id,
-              p.name,
-              p.price,
-              p.description || '',
-              p.imageUrl || '' // carrega imageUrl
-            )
-        );
-      }
-    } catch (error) {
-      console.error('Erro ao carregar produtos do JSON:', error);
-    }
-  }
-
-  /** Salva os produtos no arquivo JSON */
-  private saveToFile() {
-    try {
-      const dir = path.dirname(this.filePath);
-
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-
-      fs.writeFileSync(this.filePath, JSON.stringify(this.products, null, 2), 'utf-8');
-    } catch (error) {
-      console.error('Erro ao salvar produtos no JSON:', error);
-    }
-  }
-
+  // ➤ Lista todos os produtos
   findAll(): Product[] {
     return this.products;
   }
 
+  // ➤ Busca por ID
   findOne(id: number): Product {
     const product = this.products.find((p) => p.id === id);
     if (!product) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
     return product;
   }
 
+  // ➤ Cria novo produto (em memória)
   create(dto: CreateProductDto): Product {
-  const maxId = this.products.reduce((acc, p) => (p.id > acc ? p.id : acc), 0);
-  const newId = maxId + 1;
+    const maxId = this.products.length
+      ? Math.max(...this.products.map((p) => p.id))
+      : 1;
 
-  const product = new Product(
-    newId,
-    dto.name,
-    dto.price,
-    dto.description || '',
-    dto.imageUrl || '' // ✅ garantir que a URL seja salva
-  );
+    const product = new Product(
+      maxId + 1,
+      dto.name,
+      dto.price,
+      dto.description || '',
+      dto.imageUrl || ''
+    );
 
-  this.products.push(product);
-  this.saveToFile(); // salva no JSON
-  return product;
-}
+    this.products.push(product);
+    return product;
+  }
 
-
+  // ➤ Atualiza produto
   update(id: number, dto: UpdateProductDto): Product {
-  const index = this.products.findIndex((p) => p.id === id);
-  if (index === -1) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
+    const index = this.products.findIndex((p) => p.id === id);
+    if (index === -1) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
 
-  const current = this.products[index];
-  const updated = new Product(
-    id,
-    dto.name ?? current.name,
-    dto.price ?? current.price,
-    dto.description ?? current.description,
-    dto.imageUrl ?? current.imageUrl // ✅ garantir que a URL seja atualizada
-  );
+    const current = this.products[index];
+    const updated = new Product(
+      id,
+      dto.name ?? current.name,
+      dto.price ?? current.price,
+      dto.description ?? current.description,
+      dto.imageUrl ?? current.imageUrl
+    );
 
-  this.products[index] = updated;
-  this.saveToFile(); // salva no JSON
-  return updated;
-}
+    this.products[index] = updated;
+    return updated;
+  }
 
-
+  // ➤ Deleta produto
   remove(id: number): { message: string } {
     const index = this.products.findIndex((p) => p.id === id);
     if (index === -1) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
 
     this.products.splice(index, 1);
-    this.saveToFile();
     return { message: 'Produto removido com sucesso' };
   }
 }
