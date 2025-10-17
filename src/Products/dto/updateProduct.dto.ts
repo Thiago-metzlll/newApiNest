@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
 
 /**
  * DTO para atualização completa do produto (PUT).
@@ -16,4 +16,8 @@ export class UpdateProductDto {
 
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string; // novo campo opcional para URL da imagem
 }
