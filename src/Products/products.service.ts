@@ -1,8 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { productsDB } from '../Model/bancoDados';
-import { Product } from '../Model/productClass';
-import { CreateProductDto } from './dto/createProduct.dto';
-import { UpdateProductDto } from './dto/updateProduct.dto';
+import { productsDB } from './Model/bancoDados';
+import { Product } from './Model/product.model';
 
 @Injectable()
 export class ProductsService {
@@ -21,36 +19,33 @@ export class ProductsService {
   }
 
   // ➤ Cria novo produto (em memória)
-  create(dto: CreateProductDto): Product {
+  create(data: Partial<Product>): Product {
     const maxId = this.products.length
       ? Math.max(...this.products.map((p) => p.id))
-      : 1;
+      : 0;
 
-    const product = new Product(
-      maxId + 1,
-      dto.name,
-      dto.price,
-      dto.description || '',
-      dto.imageUrl || ''
-    );
+    const product: Product = {
+      id: maxId + 1,
+      name: data.name || 'Sem nome',
+      price: data.price || 0,
+      description: data.description || '',
+      imageUrl: data.imageUrl || '',
+    };
 
     this.products.push(product);
     return product;
   }
 
   // ➤ Atualiza produto
-  update(id: number, dto: UpdateProductDto): Product {
+  update(id: number, data: Partial<Product>): Product {
     const index = this.products.findIndex((p) => p.id === id);
     if (index === -1) throw new NotFoundException(`Produto com ID ${id} não encontrado`);
 
     const current = this.products[index];
-    const updated = new Product(
-      id,
-      dto.name ?? current.name,
-      dto.price ?? current.price,
-      dto.description ?? current.description,
-      dto.imageUrl ?? current.imageUrl
-    );
+    const updated: Product = {
+      ...current,
+      ...data, // sobrescreve os campos que vierem em data
+    };
 
     this.products[index] = updated;
     return updated;
