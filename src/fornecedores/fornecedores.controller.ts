@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, Put } from '@nestjs/common';
 import { FornecedoresService } from './fornecedores.service';
 import type { Fornecedor } from './model/fornecedoresModel';
 
@@ -26,4 +26,11 @@ export class FornecedoresController {
     this.fornecedoresService.remove(Number(id));
     return { message: 'Fornecedor removido com sucesso' };
   }
+
+  @Put(':id')
+update(@Param('id') id: string, @Body() fornecedor: Partial<Fornecedor>) {
+  const updated = this.fornecedoresService.update(Number(id), fornecedor);
+  if (!updated) return { message: 'Fornecedor não encontrado' };
+  return updated;
+}
 }
