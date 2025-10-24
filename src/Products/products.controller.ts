@@ -51,5 +51,7 @@ export class ProductsController {
       throw new HttpException('ID inválido', HttpStatus.BAD_REQUEST);
     }
     return this.productsService.remove(productId);
+
+    
   }
 }
