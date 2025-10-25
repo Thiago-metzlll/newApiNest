@@ -5,7 +5,7 @@
 import { Product } from './product.model';
 
 export const productsDB: Product[] = [
-  { id: 1, name: 'Calça seminova Básica', price: 899999999.90, description: 'Calça 100% algodão', imageUrl: 'https://www.meupositivo.com.br/doseujeito/wp-content/uploads/2022/05/Calcas-mais-velhas-do-mundo-tem-3-mil-anos-2-1024x577.jpg' },
+  { id: 1, name: 'Calça seminova Básica', price: 899999999.90, description: 'Calça 100% algodão', imageUrl: 'https://tse1.mm.bing.net/th/id/OIP.gfNng_UX3TFO-7JrwbIC_QHaFj?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3' },
   
 ];;
 
