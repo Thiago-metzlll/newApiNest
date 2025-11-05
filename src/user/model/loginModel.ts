@@ -6,7 +6,7 @@ export interface User {
   password: string;
   city: string;
   yearsOld: number;
-  descriptionUser: string;
-  preferences: string;
-  socialMedia: string;
+  descriptionUser?: string;
+  preferences?: string;
+  socialMedia?: string;
 }
