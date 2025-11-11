@@ -1,3 +1,4 @@
+// auth.service.ts
 import {
   Injectable,
   UnauthorizedException,
@@ -19,10 +20,13 @@ export class AuthService {
 
   /**
    * LOGIN
-   * Verifica o email, confere o hash da senha e retorna o token JWT.
+   * 1. Verifica se o usuário existe pelo email.
+   * 2. Compara a senha com hash armazenado.
+   * 3. Gera token JWT (expira em 1h) com payload do usuário.
+   * 4. Retorna token e usuário sem senha.
    */
   async login(data: LoginDto) {
-    const user = this.usersService.findByEmail(data.email);
+    const user = await this.usersService.findByEmail(data.email);
     if (!user) {
       throw new UnauthorizedException('Email ou senha inválidos.');
     }
@@ -32,20 +36,23 @@ export class AuthService {
       throw new UnauthorizedException('Email ou senha inválidos.');
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, name: user.name };
     const token = this.jwtService.sign(payload, { expiresIn: '1h' });
 
-    // Retorna o token e o usuário sem a senha
+    // Retorna token e usuário sem senha
     const { password, ...userWithoutPassword } = user;
     return { token, user: userWithoutPassword };
   }
 
   /**
    * REGISTER
-   * Cria o usuário com senha criptografada e gera um token JWT.
+   * 1. Verifica se o email já existe.
+   * 2. Criptografa a senha.
+   * 3. Cria usuário no banco.
+   * 4. Retorna usuário sem senha.
    */
   async register(data: RegisterDto): Promise<Omit<User, 'password'>> {
-    const existingUser = this.usersService.findByEmail(data.email);
+    const existingUser = await this.usersService.findByEmail(data.email);
     if (existingUser) {
       throw new ConflictException('Email já cadastrado.');
     }
@@ -53,7 +60,7 @@ export class AuthService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(data.password, salt);
 
-    const newUser = this.usersService.create({
+    const newUser = await this.usersService.create({
       ...data,
       password: hashedPassword,
     });
