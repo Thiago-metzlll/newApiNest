@@ -1,7 +1,7 @@
 // src/users/users.data.ts
 export const users = [{id: 1,
   name: "Thiago Souza",
-  email: "thiago123@example.com",
+  email: "thiago@example.com",
   password: "123456",
   city: "Curitiba",
   yearsOld: 23,
