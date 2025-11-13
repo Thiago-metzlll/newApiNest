@@ -3,11 +3,11 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min } from 'class-va
 export class CreateProductDto {
   @IsString()
   @IsNotEmpty({ message: 'O nome do produto é obrigatório.' })
-  name: string;
+  name!: string;
 
   @IsNumber()
   @Min(0, { message: 'O preço deve ser um número positivo.' })
-  price: number;
+  price!: number;
 
   @IsString()
   @IsOptional()
