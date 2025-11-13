@@ -1,5 +1,13 @@
 // src/users/dto/createUser.dto.ts
-import { IsEmail, IsNotEmpty, IsString, MinLength, IsNumber, Min } from 'class-validator';
+import { 
+  IsEmail, 
+  IsNotEmpty, 
+  IsString, 
+  MinLength, 
+  IsNumber, 
+  Min, 
+  IsOptional 
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -21,12 +29,15 @@ export class CreateUserDto {
   @Min(0, { message: 'A idade não pode ser negativa.' })
   yearsOld: number;
 
-  @IsString()
-  descriptionUser: string;
+  @IsOptional()
+  @IsString({ message: 'A descrição deve ser uma string.' })
+  descriptionUser?: string;
 
-  @IsString()
-  preferences: string;
+  @IsOptional()
+  @IsString({ message: 'As preferências devem ser uma string.' })
+  preferences?: string;
 
-  @IsString()
-  socialMedia: string;
+  @IsOptional()
+  @IsString({ message: 'As redes sociais devem ser uma string.' })
+  socialMedia?: string;
 }
