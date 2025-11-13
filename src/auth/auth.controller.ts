@@ -8,7 +8,7 @@ import { JwtAuthGuard } from './guards/jwtAuth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   /**
    * LOGIN
@@ -23,7 +23,7 @@ export class AuthController {
     // Cria cookie HttpOnly com token
     res.cookie('access_token', token, {
       httpOnly: true,      // não acessível via JS
-      secure: true,        // só via HTTPS
+      secure: process.env.NODE_ENV === 'production', // só HTTPS em produção
       sameSite: 'strict',  // protege contra CSRF
       maxAge: 3600 * 1000, // 1 hora
     });
@@ -55,4 +55,21 @@ export class AuthController {
     // req.user é preenchido automaticamente pelo JwtStrategy
     return { user: req.user };
   }
+
+  /**
+ * LOGOUT
+ * 1. Limpa o cookie 'access_token'.
+ * 2. Retorna mensagem de sucesso.
+ */
+@Post('logout')
+logout(@Res({ passthrough: true }) res: Response) {
+  res.clearCookie('access_token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+  });
+
+  return { message: 'Logout realizado com sucesso!' };
+}
+
 }
