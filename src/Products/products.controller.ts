@@ -8,12 +8,14 @@ import {
   Delete,
   HttpException,
   HttpStatus,
-  ParseIntPipe
+  ParseIntPipe,
+  UseGuards
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import type { Product } from './Model/product.model';
 import { CreateProductDto } from './dto/createProductDto';
 import { UpdateProductDto } from './dto/updateProductDto';
+import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 
 
 /**
@@ -21,6 +23,7 @@ import { UpdateProductDto } from './dto/updateProductDto';
  * Responsável por receber requisições HTTP relacionadas a produtos
  * e repassá-las para o ProductsService.
  */
+
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}

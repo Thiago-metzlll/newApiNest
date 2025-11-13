@@ -18,13 +18,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  /**
-   * LOGIN
-   * 1. Verifica se o usuário existe pelo email.
-   * 2. Compara a senha com hash armazenado.
-   * 3. Gera token JWT (expira em 1h) com payload do usuário.
-   * 4. Retorna token e usuário sem senha.
-   */
+  // LOGIN
   async login(data: LoginDto) {
     const user = await this.usersService.findByEmail(data.email);
     if (!user) {
@@ -36,21 +30,18 @@ export class AuthService {
       throw new UnauthorizedException('Email ou senha inválidos.');
     }
 
+    // Payload do JWT
     const payload = { sub: user.id, email: user.email, name: user.name };
     const token = this.jwtService.sign(payload, { expiresIn: '1h' });
 
-    // Retorna token e usuário sem senha
+    // Remove senha antes de retornar
     const { password, ...userWithoutPassword } = user;
+
+    // Retorna o token e o usuário; o controller vai colocar o cookie
     return { token, user: userWithoutPassword };
   }
 
-  /**
-   * REGISTER
-   * 1. Verifica se o email já existe.
-   * 2. Criptografa a senha.
-   * 3. Cria usuário no banco.
-   * 4. Retorna usuário sem senha.
-   */
+  // REGISTER
   async register(data: RegisterDto): Promise<Omit<User, 'password'>> {
     const existingUser = await this.usersService.findByEmail(data.email);
     if (existingUser) {
