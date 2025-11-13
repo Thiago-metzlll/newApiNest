@@ -1,7 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 
 
 async function bootstrap() {
@@ -25,7 +25,7 @@ async function bootstrap() {
   );
 
   // ⚙️ Cookie Parser
-app.use((cookieParser as any)());
+app.use(cookieParser());
   await app.listen(3000);
   console.log('🚀 Server running on http://localhost:3000');
 }
