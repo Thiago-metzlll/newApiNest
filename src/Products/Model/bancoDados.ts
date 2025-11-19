@@ -1,7 +1,4 @@
-/**
- * Banco de dados simulado em memória.
- * Normalmente viria de um banco real (MySQL, Postgres, etc).
- */
+// Banco de dados simulado em memória.
 import { Product } from './product.model';
 
 export const productsDB: Product[] = [

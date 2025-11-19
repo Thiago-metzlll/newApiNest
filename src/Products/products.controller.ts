@@ -12,7 +12,7 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import type { Product } from './Model/product.model';
+import type { Product } from './model/product.model';
 import { CreateProductDto } from './dto/createProductDto';
 import { UpdateProductDto } from './dto/updateProductDto';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';

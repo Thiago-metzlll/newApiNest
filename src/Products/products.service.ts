@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { productsDB } from './Model/bancoDados';
-import { Product } from './Model/product.model';
+import { productsDB } from './model/bancoDados';
+import { Product } from './model/product.model';
 import { CreateProductDto } from './dto/createProductDto';
 import { UpdateProductDto } from './dto/updateProductDto';
 
