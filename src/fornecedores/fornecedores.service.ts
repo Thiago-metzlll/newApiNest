@@ -30,7 +30,7 @@ export class FornecedoresService {
   const index = this.fornecedores.findIndex(f => f.id === id);
   if (index === -1) return undefined;
 
-  // Atualiza apenas os campos passados
+  
   this.fornecedores[index] = { ...this.fornecedores[index], ...updatedData };
   return this.fornecedores[index];
 }

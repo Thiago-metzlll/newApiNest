@@ -13,10 +13,9 @@ export class AuthController {
   async login(@Body() data: LoginDto, @Res({ passthrough: true }) res: Response) {
     const { token, user } = await this.authService.login(data);
 
-    // ⚡ Cookie ajustado para dev
     res.cookie('access_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // false em dev
+      secure: process.env.NODE_ENV === 'production', 
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // lax em localhost
       maxAge: 3600 * 1000, // 1 hora
     });

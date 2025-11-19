@@ -7,15 +7,15 @@ import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // ⚙️ CORS CONFIG
+  // CORS CONFIG
   app.enableCors({
     origin: 'http://localhost:3001', // frontend
     credentials: true, // permite cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'], // 🔥 opcional, mas recomendado
+    allowedHeaders: ['Content-Type', 'Authorization'], 
   });
 
-  // ⚙️ Pipes globais (validação DTOs)
+  // Pipes globais (validação DTOs)
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -24,7 +24,6 @@ async function bootstrap() {
     }),
   );
 
-  // ⚙️ Cookie Parser
 app.use(cookieParser());
   await app.listen(3000);
   console.log('🚀 Server running on http://localhost:3000');

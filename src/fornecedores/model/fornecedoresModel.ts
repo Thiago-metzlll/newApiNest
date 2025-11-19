@@ -3,6 +3,6 @@ export interface Fornecedor {
   name: string;
   email: string;
   description?: string;
-  imageUrl?: string; // novo campo opcional
+  imageUrl?: string; 
   city: string;
 }
