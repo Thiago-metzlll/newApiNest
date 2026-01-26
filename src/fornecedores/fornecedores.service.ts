@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma.service' ;
+import { PrismaService } from '../prisma.service';
 import { Supplier } from '@prisma/client';
 
 /*
@@ -20,7 +20,7 @@ import { Supplier } from '@prisma/client';
 
 @Injectable()
 export class FornecedoresService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   // =========================
   // READ
@@ -72,11 +72,22 @@ export class FornecedoresService {
     id: number,
     data: Partial<Omit<Supplier, 'id'>>,
   ): Promise<Supplier> {
-    await this.findOne(id); // garante que existe
+    // Check outside (optional, but keeps consistency with previous code if wanted, though redundant with tx check)
+    // await this.findOne(id); 
 
-    return this.prisma.supplier.update({
-      where: { id },
-      data,
+    return this.prisma.$transaction(async (tx) => {
+      const supplier = await tx.supplier.findUnique({
+        where: { id },
+      });
+
+      if (!supplier) {
+        throw new NotFoundException(`Fornecedor com id ${id} não encontrado`);
+      }
+
+      return tx.supplier.update({
+        where: { id },
+        data,
+      });
     });
   }
 
@@ -89,10 +100,20 @@ export class FornecedoresService {
     - filter() removendo do array
   */
   async remove(id: number): Promise<void> {
-    await this.findOne(id); // garante que existe
+    // await this.findOne(id); 
 
-    await this.prisma.supplier.delete({
-      where: { id },
+    await this.prisma.$transaction(async (tx) => {
+      const supplier = await tx.supplier.findUnique({
+        where: { id },
+      });
+
+      if (!supplier) {
+        throw new NotFoundException(`Fornecedor com id ${id} não encontrado`);
+      }
+
+      await tx.supplier.delete({
+        where: { id },
+      });
     });
   }
 
