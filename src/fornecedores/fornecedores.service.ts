@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service' ;
-import { Card } from '@prisma/client';
+import { Supplier } from '@prisma/client';
 
 /*
   =====================================================
@@ -27,13 +27,13 @@ export class FornecedoresService {
   // =========================
 
   // Retorna todos os fornecedores (antes: return this.fornecedores)
-  async findAll(): Promise<Card[]> {
-    return this.prisma.card.findMany();
+  async findAll(): Promise<Supplier[]> {
+    return this.prisma.supplier.findMany();
   }
 
   // Retorna um fornecedor pelo ID
-  async findOne(id: number): Promise<Card> {
-    const fornecedor = await this.prisma.card.findUnique({
+  async findOne(id: number): Promise<Supplier> {
+    const fornecedor = await this.prisma.supplier.findUnique({
       where: { id },
     });
 
@@ -53,8 +53,8 @@ export class FornecedoresService {
     - Gerava id com Date.now()
     - Dava push no array
   */
-  async create(data: Omit<Card, 'id'>): Promise<Card> {
-    return this.prisma.card.create({
+  async create(data: Omit<Supplier, 'id'>): Promise<Supplier> {
+    return this.prisma.supplier.create({
       data,
     });
   }
@@ -70,11 +70,11 @@ export class FornecedoresService {
   */
   async update(
     id: number,
-    data: Partial<Omit<Card, 'id'>>,
-  ): Promise<Card> {
+    data: Partial<Omit<Supplier, 'id'>>,
+  ): Promise<Supplier> {
     await this.findOne(id); // garante que existe
 
-    return this.prisma.card.update({
+    return this.prisma.supplier.update({
       where: { id },
       data,
     });
@@ -91,7 +91,7 @@ export class FornecedoresService {
   async remove(id: number): Promise<void> {
     await this.findOne(id); // garante que existe
 
-    await this.prisma.card.delete({
+    await this.prisma.supplier.delete({
       where: { id },
     });
   }
