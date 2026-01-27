@@ -3,5 +3,6 @@ export interface Product {
   name: string;
   price: number;
   description?: string;
-  imageUrl?: string; 
+  imageUrl?: string;
+  stock: number; // Adicionado para lógica ACID
 }

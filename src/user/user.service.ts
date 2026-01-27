@@ -55,4 +55,45 @@ export class UsersService {
 
     return { message: 'Usuário removido com sucesso.' };
   }
+
+  // =========================================================
+  // LÓGICA ANTIGA (ARRAY EM MEMÓRIA) — REFERÊNCIA HISTÓRICA
+  // =========================================================
+  /*
+  findAll(): User[] {
+    return this.users;
+  }
+
+  findOne(id: number): User {
+    const user = this.users.find((u) => u.id === id);
+    if (!user) throw new NotFoundException('Usuário não encontrado.');
+    return user;
+  }
+
+  findByEmail(email: string): User | undefined {
+    return this.users.find((u) => u.email === email);
+  }
+
+  create(data: CreateUserDto): User {
+    const newUser: User = {
+      id: this.users.length + 1,
+      ...data,
+    };
+    this.users.push(newUser);
+    return newUser;
+  }
+
+  update(id: number, data: UpdateUserDto): User {
+    const user = this.findOne(id);
+    Object.assign(user, data);
+    return user;
+  }
+
+  remove(id: number) {
+    const index = this.users.findIndex((u) => u.id === id);
+    if (index === -1) throw new NotFoundException('Usuário não encontrado.');
+    this.users.splice(index, 1);
+    return { message: 'Usuário removido com sucesso.' };
+  }
+  */
 }
