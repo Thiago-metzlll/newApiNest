@@ -15,12 +15,12 @@ export class AuthController {
 
     res.cookie('access_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', 
+      secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // lax em localhost
       maxAge: 3600 * 1000, // 1 hora
     });
 
-    return { user, message: 'Login realizado com sucesso!' };
+    return { user, token, message: 'Login realizado com sucesso!' };
   }
 
   @Post('register')

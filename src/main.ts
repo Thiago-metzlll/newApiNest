@@ -9,10 +9,10 @@ async function bootstrap() {
 
   // CORS CONFIG
   app.enableCors({
-    origin: 'http://localhost:3001', // frontend
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'], // frontend variants
     credentials: true, // permite cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'], 
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   // Pipes globais (validação DTOs)
@@ -24,7 +24,7 @@ async function bootstrap() {
     }),
   );
 
-app.use(cookieParser());
+  app.use(cookieParser());
   await app.listen(3000);
   console.log('🚀 Server running on http://localhost:3000');
 }
