@@ -9,13 +9,13 @@ export class OrdersController {
     @UseGuards(JwtAuthGuard)
     @Post('checkout')
     async checkout(@Request() req) {
-        // req.user.id vem do JWT payload
-        return this.ordersService.checkout(req.user.sub);
+        // req.user.userId vem do JWT payload (definido no JwtStrategy.validate)
+        return this.ordersService.checkout(req.user.userId);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get()
     async getMyOrders(@Request() req) {
-        return this.ordersService.getUserOrders(req.user.sub);
+        return this.ordersService.getUserOrders(req.user.userId);
     }
 }
