@@ -9,18 +9,18 @@ export class CartController {
     @UseGuards(JwtAuthGuard)
     @Post()
     async addToCart(@Request() req, @Body() data: { productId: number; quantity: number }) {
-        return this.cartService.addToCart(req.user.sub, data.productId, data.quantity);
+        return this.cartService.addToCart(req.user.userId, data.productId, data.quantity);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get()
     async getCart(@Request() req) {
-        return this.cartService.getCart(req.user.sub);
+        return this.cartService.getCart(req.user.userId);
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete(':productId')
     async removeFromCart(@Request() req, @Param('productId', ParseIntPipe) productId: number) {
-        return this.cartService.removeFromCart(req.user.sub, productId);
+        return this.cartService.removeFromCart(req.user.userId, productId);
     }
 }

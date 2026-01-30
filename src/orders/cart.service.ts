@@ -6,7 +6,7 @@ export class CartService {
     constructor(private prisma: PrismaService) { }
 
     async addToCart(userId: string, productId: number, quantity: number) {
-        return this.prisma.userProduct.upsert({
+        const result = await this.prisma.userProduct.upsert({
             where: {
                 userId_productId: { userId, productId },
             },
@@ -19,21 +19,24 @@ export class CartService {
                 quantity,
             },
         });
+        return { ...result, id: result.id.toString() };
     }
 
     async getCart(userId: string) {
-        return this.prisma.userProduct.findMany({
+        const items = await this.prisma.userProduct.findMany({
             where: { userId },
             include: { product: true },
         });
+        return items.map(item => ({ ...item, id: item.id.toString() }));
     }
 
     async removeFromCart(userId: string, productId: number) {
-        return this.prisma.userProduct.delete({
+        const result = await this.prisma.userProduct.delete({
             where: {
                 userId_productId: { userId, productId },
             },
         });
+        return { ...result, id: result.id.toString() };
     }
 
     async clearCart(userId: string) {
