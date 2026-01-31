@@ -1,11 +1,55 @@
-Este projeto consiste em uma API para um e-commerce simples.
-O frontend da aplicação encontra-se disponível em outro repositório em meu GitHub.
+# NewApiNest - Ecommerce Backend
 
-A API é responsável por lidar com as requisições do sistema de e-commerce e foi desenvolvida utilizando NestJS, um framework moderno baseado em TypeScript.
+API robusta para e-commerce desenvolvida com **NestJS**, focada em performance e escalabilidade.
 
-Foi adotada a arquitetura modular padrão do NestJS, composta por modules, controllers e services.
-Os controllers são responsáveis pelo gerenciamento das rotas e métodos HTTP, os services concentram a lógica de negócio, e os modules organizam e estruturam a aplicação, além de possibilitarem sua correta compilação.
+## 🚀 Tecnologias e Arquitetura
 
-Para validação e transformação de dados, são utilizados DTOs e Pipes, juntamente com o tratamento de exceções, garantindo maior consistência e segurança nas entradas da API.
+-   **Framework**: [NestJS](https://nestjs.com/) (TypeScript)
+-   **ORM**: [Prisma](https://www.prisma.io/)
+-   **Banco de Dados**: PostgreSQL (Supabase)
+-   **Autenticação**: JWT com Cookies HttpOnly e estratégias de segurança Passport.
+-   **Transações ACID**: Processamento de pedidos via transações do Prisma para garantir integridade do estoque.
+-   **CORS**: Configuração dinâmica para múltiplos ambientes.
 
-No que se refere à autenticação e segurança, o projeto utiliza bcrypt para a criptografia de senhas, além de guards e strategies para o controle de acesso. A autenticação é realizada por meio da geração de tokens e cookies, assegurando a integridade do processo de autenticação dos usuários
+## 🛠️ Correções e Melhorias Recentes
+
+Realizamos uma série de ajustes críticos para estabilidade em produção:
+
+1.  **Deploy no Vercel**: Sincronização de módulos e correção de dependências de build.
+2.  **Fix de Checkout (Prisma)**: Ajustado o mapeamento do `userId` no `OrdersController` para garantir que o ID do usuário seja extraído corretamente do token JWT.
+3.  **CORS Dinâmico**: Adicionado suporte à variável `ALLOWED_ORIGINS`, permitindo que o frontend no Vercel e o ambiente local funcionem simultaneamente sem bloqueios de segurança.
+
+## ⚙️ Variáveis de Ambiente
+
+As seguintes variáveis devem ser configuradas para o funcionamento correto (consulte `vercel-setup.md` para detalhes):
+
+```env
+DATABASE_URL="URL de conexão com pooling (Supabase)"
+DIRECT_URL="URL de conexão direta para migrations"
+ALLOWED_ORIGINS="URLs permitidas (ex: https://seu-app.vercel.app,http://localhost:3000)"
+JWT_SECRET="Sua chave secreta para tokens"
+```
+
+## 📦 Execução Local
+
+```bash
+# Instalar dependências
+npm install
+
+# Gerar Client do Prisma
+npx prisma generate
+
+# Rodar em modo desenvolvimento
+npm run start:dev
+```
+
+## 🏗️ Estrutura do Projeto
+
+-   `/src/products`: Gestão de catálogo de produtos.
+-   `/src/orders`: Sistema de carrinho e checkout com transações.
+-   `/src/auth`: Autenticação e proteção de rotas.
+-   `/src/user`: Gestão de perfis de usuários.
+-   `/prisma`: Schema e migrations do banco de dados.
+
+---
+Desenvolvido por [Thiago Metzlll](https://github.com/Thiago-metzlll)
