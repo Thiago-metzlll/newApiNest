@@ -8,11 +8,23 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // CORS CONFIG
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'];
+
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'], // frontend variants
+    origin: allowedOrigins,
     credentials: true, // permite cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Accept',
+      'X-Requested-With',
+      'Origin',
+      'Access-Control-Allow-Origin'
+    ],
+    exposedHeaders: ['Set-Cookie'], // Importante para cookies se usar o frontend no Vercel
   });
 
   // Pipes globais (validação DTOs)
