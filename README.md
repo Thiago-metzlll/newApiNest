@@ -8,7 +8,10 @@ API robusta para e-commerce desenvolvida com **NestJS**, focada em performance e
 -   **ORM**: [Prisma](https://www.prisma.io/)
 -   **Banco de Dados**: PostgreSQL (Supabase)
 -   **Autenticação**: JWT com Cookies HttpOnly e estratégias de segurança Passport.
--   **Transações ACID**: Processamento de pedidos via transações do Prisma para garantir integridade do estoque.
+-   **Banco de Dados**: PostgreSQL (Supabase) & NoSQL (Firebase Firestore)
+-   **Autenticação**: JWT com Cookies HttpOnly e estratégias de segurança Passport.
+-   **Cloud Integration**: Suporte nativo para **Firebase Admin SDK**.
+-   **Transações ACID**: Processamento de pedidos via transações do Prisma para garantir integridade do estoque no PostgreSQL.
 -   **CORS**: Configuração dinâmica para múltiplos ambientes.
 
 ## 🛠️ Correções e Melhorias Recentes
@@ -18,6 +21,7 @@ Realizamos uma série de ajustes críticos para estabilidade em produção:
 1.  **Deploy no Vercel**: Sincronização de módulos e correção de dependências de build.
 2.  **Fix de Checkout (Prisma)**: Ajustado o mapeamento do `userId` no `OrdersController` para garantir que o ID do usuário seja extraído corretamente do token JWT.
 3.  **CORS Dinâmico**: Adicionado suporte à variável `ALLOWED_ORIGINS`, permitindo que o frontend no Vercel e o ambiente local funcionem simultaneamente sem bloqueios de segurança.
+4.  **Híbrido Supabase/Firebase**: Implementado novo módulo de produtos que pode operar tanto via PostgreSQL (Prisma) quanto via Firestore (Firebase).
 
 ## ⚙️ Variáveis de Ambiente
 
@@ -26,8 +30,19 @@ As seguintes variáveis devem ser configuradas para o funcionamento correto (con
 ```env
 DATABASE_URL="URL de conexão com pooling (Supabase)"
 DIRECT_URL="URL de conexão direta para migrations"
-ALLOWED_ORIGINS="URLs permitidas (ex: https://seu-app.vercel.app,http://localhost:3000)"
+ALLOWED_ORIGINS="http://localhost:3001,http://localhost:3000"
 JWT_SECRET="Sua chave secreta para tokens"
+FIREBASE_KEY_PATH="src/config/firebase-key.json"
+```
+
+## 🍬 Seeds (Dados de Teste)
+
+```bash
+# Seed padrão (Supabase/Prisma)
+npx prisma db seed
+
+# Seed exclusivo para Firebase
+npm run seed:firebase
 ```
 
 ## 📦 Execução Local
