@@ -1,70 +1,33 @@
-# NewApiNest - Ecommerce Backend
+# NewApiNest Frontend
 
-API robusta para e-commerce desenvolvida com **NestJS**, focada em performance e escalabilidade.
+Frontend para a API **NewApiNest**, desenvolvido em **React**, com foco em componentização, integração com múltiplos bancos e fluxo de dados em uma aplicação realista.
 
-## 🚀 Tecnologias e Arquitetura
+## Tecnologias e Arquitetura
 
--   **Framework**: [NestJS](https://nestjs.com/) (TypeScript)
--   **ORM**: [Prisma](https://www.prisma.io/)
--   **Banco de Dados**: PostgreSQL (Supabase)
--   **Autenticação**: JWT com Cookies HttpOnly e estratégias de segurança Passport.
--   **Banco de Dados**: PostgreSQL (Supabase) & NoSQL (Firebase Firestore)
--   **Autenticação**: JWT com Cookies HttpOnly e estratégias de segurança Passport.
--   **Cloud Integration**: Suporte nativo para **Firebase Admin SDK**.
--   **Transações ACID**: Processamento de pedidos via transações do Prisma para garantir integridade do estoque no PostgreSQL.
--   **CORS**: Configuração dinâmica para múltiplos ambientes.
+- **Framework**: React
+- **Comunicação com API**: `fetch`
+- **Integração Multi-Database**: Consome dados do **Supabase (PostgreSQL)** e do **Firebase (Firestore)**, dependendo da configuração da API.
+- **Componentização**: Estrutura modular para facilitar manutenção e reuso de componentes.
+- **Gerenciamento de estado**: Hooks nativos (`useState`, `useEffect`) e Context API.
+- **Objetivo**: Estudo de integração front-end / back-end, organização de componentes e fluxo de dados em um projeto realista.
 
-## 🛠️ Correções e Melhorias Recentes
+## Funcionalidades
 
-Realizamos uma série de ajustes críticos para estabilidade em produção:
+- Consome endpoints da API NewApiNest para produtos, pedidos e usuários.
+- Suporte a múltiplos bancos de dados via configuração na API.
+- Estrutura pensada para escalabilidade e manutenção futura.
 
-1.  **Deploy no Vercel**: Sincronização de módulos e correção de dependências de build.
-2.  **Fix de Checkout (Prisma)**: Ajustado o mapeamento do `userId` no `OrdersController` para garantir que o ID do usuário seja extraído corretamente do token JWT.
-3.  **CORS Dinâmico**: Adicionado suporte à variável `ALLOWED_ORIGINS`, permitindo que o frontend no Vercel e o ambiente local funcionem simultaneamente sem bloqueios de segurança.
-4.  **Híbrido Supabase/Firebase**: Implementado novo módulo de produtos que pode operar tanto via PostgreSQL (Prisma) quanto via Firestore (Firebase).
+## Melhorias e Ajustes Pendentes
 
-## ⚙️ Variáveis de Ambiente
+- Ajuste da identidade visual (cores dos botões, tipografia e consistência visual).
+- Polimento do layout geral para maior usabilidade.
+- Eventuais otimizações de performance no consumo de dados e renderização de componentes.
 
-As seguintes variáveis devem ser configuradas para o funcionamento correto (consulte `vercel-setup.md` para detalhes):
-
-```env
-DATABASE_URL="URL de conexão com pooling (Supabase)"
-DIRECT_URL="URL de conexão direta para migrations"
-ALLOWED_ORIGINS="http://localhost:3001,http://localhost:3000"
-JWT_SECRET="Sua chave secreta para tokens"
-FIREBASE_KEY_PATH="src/config/firebase-key.json"
-```
-
-## 🍬 Seeds (Dados de Teste)
-
-```bash
-# Seed padrão (Supabase/Prisma)
-npx prisma db seed
-
-# Seed exclusivo para Firebase
-npm run seed:firebase
-```
-
-## 📦 Execução Local
+## Execução Local
 
 ```bash
 # Instalar dependências
 npm install
 
-# Gerar Client do Prisma
-npx prisma generate
-
 # Rodar em modo desenvolvimento
-npm run start:dev
-```
-
-## 🏗️ Estrutura do Projeto
-
--   `/src/products`: Gestão de catálogo de produtos.
--   `/src/orders`: Sistema de carrinho e checkout com transações.
--   `/src/auth`: Autenticação e proteção de rotas.
--   `/src/user`: Gestão de perfis de usuários.
--   `/prisma`: Schema e migrations do banco de dados.
-
----
-Desenvolvido por [Thiago Metzlll](https://github.com/Thiago-metzlll)
+npm start
