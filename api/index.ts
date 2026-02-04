@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../src/app.module';
+import { setupApp } from '../src/setup';
+
+let cachedApp: any;
 
 export default async function handler(req: any, res: any) {
-    const app = await NestFactory.create(AppModule);
-    await app.init();
-    const instance = app.getHttpAdapter().getInstance();
-    instance(req, res);
+    if (!cachedApp) {
+        const app = await NestFactory.create(AppModule);
+        setupApp(app);
+        await app.init();
+        cachedApp = app.getHttpAdapter().getInstance();
+    }
+    cachedApp(req, res);
 }
