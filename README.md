@@ -1,70 +1,52 @@
-# NewApiNest - Ecommerce Backend
+NewApiNest Frontend
 
-API robusta para e-commerce desenvolvida com **NestJS**, focada em performance e escalabilidade.
+Frontend para a API NewApiNest, desenvolvido em React, com foco em componentização, integração com múltiplos bancos e fluxo de dados em uma aplicação realista.
 
-## 🚀 Tecnologias e Arquitetura
+Tecnologias e Arquitetura
 
--   **Framework**: [NestJS](https://nestjs.com/) (TypeScript)
--   **ORM**: [Prisma](https://www.prisma.io/)
--   **Banco de Dados**: PostgreSQL (Supabase)
--   **Autenticação**: JWT com Cookies HttpOnly e estratégias de segurança Passport.
--   **Banco de Dados**: PostgreSQL (Supabase) & NoSQL (Firebase Firestore)
--   **Autenticação**: JWT com Cookies HttpOnly e estratégias de segurança Passport.
--   **Cloud Integration**: Suporte nativo para **Firebase Admin SDK**.
--   **Transações ACID**: Processamento de pedidos via transações do Prisma para garantir integridade do estoque no PostgreSQL.
--   **CORS**: Configuração dinâmica para múltiplos ambientes.
+Framework: React
 
-## 🛠️ Correções e Melhorias Recentes
+Comunicação com API: fetch
 
-Realizamos uma série de ajustes críticos para estabilidade em produção:
+Integração Multi-Database: Consome dados do Supabase (PostgreSQL) e do Firebase (Firestore), dependendo da configuração da API.
 
-1.  **Deploy no Vercel**: Sincronização de módulos e correção de dependências de build.
-2.  **Fix de Checkout (Prisma)**: Ajustado o mapeamento do `userId` no `OrdersController` para garantir que o ID do usuário seja extraído corretamente do token JWT.
-3.  **CORS Dinâmico**: Adicionado suporte à variável `ALLOWED_ORIGINS`, permitindo que o frontend no Vercel e o ambiente local funcionem simultaneamente sem bloqueios de segurança.
-4.  **Híbrido Supabase/Firebase**: Implementado novo módulo de produtos que pode operar tanto via PostgreSQL (Prisma) quanto via Firestore (Firebase).
+Componentização: Estrutura modular para facilitar manutenção e reuso de componentes.
 
-## ⚙️ Variáveis de Ambiente
+Gerenciamento de estado: Hooks nativos (useState, useEffect) e Context API.
 
-As seguintes variáveis devem ser configuradas para o funcionamento correto (consulte `vercel-setup.md` para detalhes):
+Objetivo: Estudo de integração front-end / back-end, organização de componentes e fluxo de dados em um projeto realista.
 
-```env
-DATABASE_URL="URL de conexão com pooling (Supabase)"
-DIRECT_URL="URL de conexão direta para migrations"
-ALLOWED_ORIGINS="http://localhost:3001,http://localhost:3000"
-JWT_SECRET="Sua chave secreta para tokens"
-FIREBASE_KEY_PATH="src/config/firebase-key.json"
-```
+Funcionalidades
 
-## 🍬 Seeds (Dados de Teste)
+Consome endpoints da API NewApiNest para produtos, pedidos e usuários.
 
-```bash
-# Seed padrão (Supabase/Prisma)
-npx prisma db seed
+Suporte a múltiplos bancos de dados via configuração na API.
 
-# Seed exclusivo para Firebase
-npm run seed:firebase
-```
+Estrutura pensada para escalabilidade e manutenção futura.
 
-## 📦 Execução Local
+Melhorias e Ajustes Pendentes
 
-```bash
+Ajuste da identidade visual (cores dos botões, tipografia e consistência visual).
+
+Polimento do layout geral para maior usabilidade.
+
+Eventuais otimizações de performance no consumo de dados e renderização de componentes.
+
+Execução Local
 # Instalar dependências
 npm install
 
-# Gerar Client do Prisma
-npx prisma generate
-
 # Rodar em modo desenvolvimento
-npm run start:dev
-```
+npm start
 
-## 🏗️ Estrutura do Projeto
+Estrutura do Projeto
 
--   `/src/products`: Gestão de catálogo de produtos.
--   `/src/orders`: Sistema de carrinho e checkout com transações.
--   `/src/auth`: Autenticação e proteção de rotas.
--   `/src/user`: Gestão de perfis de usuários.
--   `/prisma`: Schema e migrations do banco de dados.
+/src/components: Componentes reutilizáveis da interface.
 
----
-Desenvolvido por [Thiago Metzlll](https://github.com/Thiago-metzlll)
+/src/pages: Páginas e rotas principais.
+
+/src/services: Funções para comunicação com a API (fetch/axios).
+
+/src/context: Context API para gerenciamento global de estado.
+
+/public: Arquivos estáticos (imagens, favicon, etc.).
