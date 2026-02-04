@@ -6,14 +6,9 @@ import { UpdateProductDto } from './dto/updateProductDto';
 
 /*
   EVOLUÇÃO DO SERVICE
-
-  ANTES:
-  - Array em memória
-  - Estado volátil
-  - Sem garantia de consistência
-
+  ANTES: Array em memória(usamos a pasta model)
   AGORA:
-  - Banco PostgreSQL
+  - Banco PostgreSQL, a gente ta usando o Supabase
   - Prisma como ORM
   - Transações quando há risco de inconsistência (ACID)
 */
@@ -22,10 +17,7 @@ import { UpdateProductDto } from './dto/updateProductDto';
 export class ProductsService {
   constructor(private prisma: PrismaService) { }
 
-  // =========================================================
   // READ — não precisa de transação (somente leitura)
-  // =========================================================
-
   async findAll(): Promise<Product[]> {
     return this.prisma.product.findMany();
   }
@@ -42,10 +34,8 @@ export class ProductsService {
     return product;
   }
 
-  // =========================================================
-  // CREATE — transação preparada para crescimento futuro
-  // =========================================================
 
+  // CREATE — transação preparada para crescimento futuro
   async create(data: CreateProductDto): Promise<Product> {
     /*
       Por enquanto:
@@ -63,15 +53,12 @@ export class ProductsService {
 
       // Exemplo futuro:
       // await tx.productSupplier.create({ ... });
-
       return product;
     });
   }
 
-  // =========================================================
-  // UPDATE — leitura + escrita precisam ser consistentes
-  // =========================================================
 
+  // UPDATE — leitura + escrita precisam ser consistentes
   async update(id: number, data: UpdateProductDto): Promise<Product> {
     return this.prisma.$transaction(async (tx) => {
       /*
@@ -96,14 +83,12 @@ export class ProductsService {
     });
   }
 
-  // =========================================================
-  // DELETE — envolve efeito cascata (ProductSupplier, UserProduct)
-  // =========================================================
 
+  // DELETE — envolve efeito cascata (ProductSupplier, UserProduct)
   async remove(id: number): Promise<{ message: string }> {
     return this.prisma.$transaction(async (tx) => {
       /*
-        Aqui a transação é MUITO importante:
+        Aqui a transação é muito importante:
 
         - Product tem relações com:
           - product_suppliers
@@ -127,9 +112,7 @@ export class ProductsService {
     });
   }
 
-  // =========================================================
-  // LÓGICA ANTIGA (ARRAY EM MEMÓRIA) — REFERÊNCIA HISTÓRICA
-  // =========================================================
+  // LÓGICA ANTIGA (ARRAY EM MEMÓRIA) — das antigas aulas
   /*
   findAll(): Product[] {
     return this.products;
