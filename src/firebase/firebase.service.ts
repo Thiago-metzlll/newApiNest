@@ -11,6 +11,10 @@ export class FirebaseService {
         if (!admin.apps.length) {
             const keyPath = this.config.get<string>('FIREBASE_KEY_PATH');
 
+            if (!keyPath) {
+                throw new Error('FIREBASE_KEY_PATH is not defined in the environment variables');
+            }
+
             admin.initializeApp({
                 credential: admin.credential.cert(
                     path.resolve(keyPath),
