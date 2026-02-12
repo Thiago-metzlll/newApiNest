@@ -1,33 +1,43 @@
-# NewApiNest Frontend
+# newApiNest
 
-Frontend para a API **NewApiNest**, desenvolvido em **React**, com foco em componentização, integração com múltiplos bancos e fluxo de dados em uma aplicação realista.
+Este projeto é uma API desenvolvida em NestJS que serve como backend para aplicações web. A aplicação é multi-database, utilizando tanto o Supabase (PostgreSQL) quanto o Firebase (Firestore) para armazenamento de dados.
 
-## Tecnologias e Arquitetura
+A arquitetura foi planejada para separar responsabilidades: dados relacionais ficam no PostgreSQL (usuários, pedidos, fornecedores) enquanto dados mais dinâmicos e flexíveis vão para o Firestore (produtos). Toda a comunicação entre databases é gerenciada pela API através do Prisma (PostgreSQL) e Firebase Admin SDK (Firestore).
 
-- **Framework**: React
-- **Comunicação com API**: `fetch`
-- **Integração Multi-Database**: Consome dados do **Supabase (PostgreSQL)** e do **Firebase (Firestore)**, dependendo da configuração da API.
-- **Componentização**: Estrutura modular para facilitar manutenção e reuso de componentes.
-- **Gerenciamento de estado**: Hooks nativos (`useState`, `useEffect`) e Context API.
-- **Objetivo**: Estudo de integração front-end / back-end, organização de componentes e fluxo de dados em um projeto realista.
+No backend foi utilizado NestJS com arquitetura modular, autenticação JWT com guards, bcrypt para hash de senhas e cookies httpOnly para segurança. O objetivo do projeto é estudar integração multi-database, autenticação robusta e organização de código em uma aplicação realista.
 
-## Funcionalidades
+Obs: ainda preciso melhorar o tratamento de erros e adicionar mais validações nos endpoints.
 
-- Consome endpoints da API NewApiNest para produtos, pedidos e usuários.
-- Suporte a múltiplos bancos de dados via configuração na API.
-- Estrutura pensada para escalabilidade e manutenção futura.
+## Tecnologias
 
-## Melhorias e Ajustes Pendentes
+- NestJS
+- Prisma (PostgreSQL/Supabase)
+- Firebase Admin SDK (Firestore)
+- JWT + Passport
+- bcrypt
+- TypeScript
 
-- Ajuste da identidade visual (cores dos botões, tipografia e consistência visual).
-- Polimento do layout geral para maior usabilidade.
-- Eventuais otimizações de performance no consumo de dados e renderização de componentes.
+## Estrutura
 
-## Execução Local
+A API conta com os seguintes módulos:
+
+- auth - Sistema de autenticação (login, registro, guards JWT)
+- user - Gerenciamento de usuários e perfis
+- products - Produtos armazenados no PostgreSQL
+- products_firebase - Produtos armazenados no Firestore
+- orders - Pedidos
+- fornecedores - Fornecedores
+
+## Rodando localmente
 
 ```bash
 # Instalar dependências
 npm install
 
 # Rodar em modo desenvolvimento
-npm start
+npm run start:dev
+
+# Build para produção
+npm run build
+npm run start:prod
+```
